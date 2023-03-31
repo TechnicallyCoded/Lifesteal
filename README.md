@@ -1,6 +1,9 @@
 # Lifesteal Plugin
 Lifesteal plugin for Paper servers
 
+## Donate
+https://www.paypal.com/donate/?hosted_button_id=85Z2GDH4W4QNC
+
 ## Description
 This plugin allows players to gain health when they kill other players. It also allows players to gain health when they
 use special items. The plugin is designed to be as configurable as possible. It supports multiple worlds and multiple
