@@ -1,0 +1,41 @@
+# ----------------
+# Lifesteal Plugin
+# ----------------
+# HP is 2x hearts
+
+# Should players lose hearts even if it's not a player kill?
+lose-hearts-on-non-player-death: true
+# How many HP should be lost by the victim or transferred to the killer?
+hp-lose-amount: 2
+
+
+# True if you want players to gain hearts by killing others
+allow-lifestealing: true
+# Max HP for players - 60 hp = 30 hearts
+max-hp: 60
+
+# Item ID of an item that will allow players to gain hearts
+# without killing others
+bonus-item-for-regen: "enchanted_golden_apple"
+# How many hearts should the bonus item allow you to go up to?
+max-hp-for-bonus-item: 30
+
+groups:
+  a:
+    # The world people will be sent to once they die
+    hub-world: "spawn"
+    # 0 means death and elimination is allowed, any higher
+    # will prevent the players from dying
+    min-health: 0
+    # Worlds to group under this "game"
+    worlds:
+      - "lifesteal"
+      - "lifesteal_nether"
+      - "lifesteal_the_end"
+  b:
+    hub-world: "spawn"
+    min-health: 0
+    worlds:
+      - "hybrid"
+      - "hybrid_nether"
+      - "hybrid_the_end"
