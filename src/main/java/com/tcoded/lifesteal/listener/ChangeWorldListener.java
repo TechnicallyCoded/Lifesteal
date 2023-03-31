@@ -31,7 +31,6 @@ public class ChangeWorldListener implements Listener {
     // https://hub.spigotmc.org/javadocs/spigot/org/bukkit/event/player/PlayerChangedWorldEvent.html
     @EventHandler
     public void onChangeWorld(PlayerChangedWorldEvent event) {
-        System.out.println("ChangeWorldListener.onChangeWorld");
         Player player = event.getPlayer();
         String prevWorld = event.getFrom().getName();
         String currentWorld = player.getWorld().getName();
@@ -86,7 +85,6 @@ public class ChangeWorldListener implements Listener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
-        System.out.println("ChangeWorldListener.onTeleport");
         Location from = event.getFrom();
         Location to = event.getTo();
         if (from.getWorld().equals(to.getWorld())) {
@@ -129,7 +127,6 @@ public class ChangeWorldListener implements Listener {
         if (playerGroupData == null) {
             playerGroupData = new PlayerGroupData(currentWorldGroup.getName(), 20, 20);
             playerData.addGroupData(playerGroupData);
-            System.out.println("CHANGE WORLD groupData = " + playerGroupData);
         }
 
         // Set hp and max hp of the new world

@@ -35,11 +35,9 @@ public class JoinListener implements Listener {
     public static void applyPlayerData(Lifesteal plugin, Player player, PlayerData playerData) {
         World world = player.getWorld();
         String worldName = world.getName();
-        System.out.println("worldName = " + worldName);
 
         // Get group
         LifestealGroup group = plugin.getLifestealGroupByWorldName(worldName);
-        System.out.println("group = " + group);
         if (group == null) {
             return;
         }
@@ -50,11 +48,9 @@ public class JoinListener implements Listener {
 
         // Create group data if it exists
         PlayerGroupData groupData = playerData.getGroupData(group.getName());
-        System.out.println("groupData = " + groupData);
         if (groupData == null) {
             groupData = new PlayerGroupData(group.getName(), 20, 20);
             playerData.addGroupData(groupData);
-            System.out.println("groupData = " + groupData);
         }
 
         // Kick player out of the world if they shouldn't be able to enter it anymore
@@ -69,7 +65,6 @@ public class JoinListener implements Listener {
         }
 
         // Apply new player data
-        System.out.println("apply..");
         PlayerDataUtil.applyPlayerGroupDataToPlayer(player, groupData, maxHp);
 
     }

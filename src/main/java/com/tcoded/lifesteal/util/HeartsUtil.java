@@ -33,15 +33,11 @@ public class HeartsUtil {
 
     public static HeartChangeResult loseHearts(Player victim, int hpLoseAmount, int minHp, int maxHp) {
 
-        System.out.println("HeartsUtil.loseHearts");
         AttributeInstance maxHpAttribute = victim.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (maxHpAttribute == null) return null; // impossible?
 
         int currentHp = doubleHpToIntHp(maxHpAttribute.getValue());
-        System.out.println("currentHp = " + currentHp);
-        System.out.println("hpLoseAmount = " + hpLoseAmount);
         int newHp = currentHp - hpLoseAmount;
-        System.out.println("newHp = " + newHp);
 
         HeartChangeResult result = HeartChangeResult.SUCCESS;
 

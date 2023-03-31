@@ -31,8 +31,6 @@ public class DeathListener implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
 
-        System.out.println("DeathListener.onDeath");
-
         boolean allowLifestealing = this.plugin.isAllowLifestealing();
         if (!allowLifestealing) {
             return;

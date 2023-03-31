@@ -87,9 +87,6 @@ public class PlayerData {
     }
 
     public void addGroupData(PlayerGroupData groupData) {
-        System.out.println("ADDING groupData = " + groupData.getName());
-        System.out.println("ADDING groupData = " + groupData.getHp());
-        System.out.println("ADDING groupData = " + groupData.getMaxHp());
         this.groupData.put(groupData.getName(), groupData);
     }
 
