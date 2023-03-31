@@ -1,6 +1,15 @@
 # Lifesteal Plugin
 Lifesteal plugin for Paper servers
 
+## Description
+This plugin allows players to gain health when they kill other players. It also allows players to gain health when they
+use special items. The plugin is designed to be as configurable as possible. It supports multiple worlds and multiple
+games at the same time. It also supports death bans and minimum health options.
+
+## Dependencies
+ - Paper 1.19+
+ - Java 17
+
 ## Features
  - Lifesteal on death
  - Multi-world support
