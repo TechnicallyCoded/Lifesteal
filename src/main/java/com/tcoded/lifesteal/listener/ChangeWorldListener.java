@@ -103,7 +103,14 @@ public class ChangeWorldListener implements Listener {
         boolean worldIsInGroup = worldGroup != null;
         PlayerGroupData playerGroupData = worldIsInGroup ? playerData.getGroupData(worldGroup.getName()) : null;
 
+        // Check if player died in the world-group
         if (worldIsInGroup) {
+
+            // Ensure that the group data for this world exists
+            if (playerGroupData == null) {
+                return;
+            }
+
             // Check if the player is permitted to enter the world
             if (playerGroupData.getMaxHp() <= 0) {
                 if (worldGroup.getMinHealth() <= 0) {
