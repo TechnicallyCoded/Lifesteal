@@ -6,6 +6,8 @@ import com.tcoded.lifesteal.util.HeartsUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,22 +26,34 @@ public class ItemClickListener implements Listener {
 
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
+        // Check if the event is cancelled
         if (event.useItemInHand() == Event.Result.DENY) {
             return;
         }
 
+        // Check holding something in the hand
         ItemStack item = event.getItem();
         if (item == null) {
             return;
         }
 
+        // Check that the player is in a lifesteal world
+        Player player = event.getPlayer();
+        if (this.plugin.getLifestealGroupByWorldName(player.getWorld().getName()) == null) {
+            return;
+        }
+
+        // Get keys to check
         String key = item.getType().getKey().getKey();
         String bonusItem = plugin.getBonusItemForRegen();
+
+        // Other config values
         int maxBonusAmount = plugin.getMaxHpForBonusItem();
         int bonusAmount = 1;
 
+        // Check if the item is the bonus item
         if (key.equals(bonusItem)) {
-            HeartChangeResult result = HeartsUtil.gainHearts(event.getPlayer(), bonusAmount, maxBonusAmount);
+            HeartChangeResult result = HeartsUtil.gainHearts(player, bonusAmount, maxBonusAmount);
 
             removeOneItem(event, item);
 
@@ -52,7 +66,7 @@ public class ItemClickListener implements Listener {
                     NamedTextColor.GREEN;
 
             TextComponent text = Component.text(message, color);
-            event.getPlayer().sendMessage(text);
+            player.sendMessage(text);
         }
     }
 

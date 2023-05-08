@@ -1,5 +1,7 @@
 package com.tcoded.lifesteal.listener;
 
+import com.tcoded.folialib.enums.EntityTaskResult;
+import com.tcoded.folialib.impl.ServerImplementation;
 import com.tcoded.lifesteal.Lifesteal;
 import com.tcoded.lifesteal.manager.PlayerDataManager;
 import com.tcoded.lifesteal.model.LifestealGroup;
@@ -17,6 +19,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class QuitListener implements Listener {
 
@@ -59,13 +62,21 @@ public class QuitListener implements Listener {
             // remove data on the next tick
             Server server = plugin.getServer();
 
-            // Run on the main thread
-            server.getScheduler().callSyncMethod(plugin, () -> {
-                Player foundPlayer = server.getPlayer(uuid);
+            // Folia support
+            ServerImplementation foliaImpl = plugin.getFoliaLib().getImpl();
 
+            // Run on the main thread or async for folia
+            Player foundPlayer = foliaImpl.getPlayer(uuid);
+
+            // Cleanup task
+            Runnable cleanupTask = () -> {
+                playerDataManager.forgetPlayerData(uuid);
+            };
+
+            CompletableFuture<EntityTaskResult> resultFuture = foliaImpl.runAtEntityWithFallback(foundPlayer, () -> {
                 // Cleanup and remove player data
-                if (foundPlayer == null) {
-                    playerDataManager.forgetPlayerData(uuid);
+                if (foundPlayer == null || !foundPlayer.isOnline()) {
+                    cleanupTask.run();
                 }
 
                 // The player is somehow back online - overwrite the data, the loaded data is probably outdated
@@ -73,8 +84,13 @@ public class QuitListener implements Listener {
                     playerDataManager.replacePlayerData(uuid, playerData);
                     JoinListener.applyPlayerData(plugin, foundPlayer, playerData);
                 }
+            }, cleanupTask);
 
-                return null;
+            // If player's scheduler is retired, cleanup
+            resultFuture.thenAccept(result -> {
+                if (result == EntityTaskResult.SCHEDULER_RETIRED) {
+                    cleanupTask.run();
+                }
             });
         });
     }

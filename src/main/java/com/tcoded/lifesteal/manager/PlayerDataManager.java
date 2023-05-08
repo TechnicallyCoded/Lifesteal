@@ -17,7 +17,7 @@ public class PlayerDataManager {
     private final Lifesteal plugin;
     private final File playerDataFolder;
 
-    private ConcurrentHashMap<UUID, PlayerData> playerData = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, PlayerData> playerData = new ConcurrentHashMap<>();
 
     public PlayerDataManager(Lifesteal plugin) {
         this.plugin = plugin;
@@ -86,7 +86,7 @@ public class PlayerDataManager {
     public CompletableFuture<Void> savePlayerDataAsync(PlayerData playerData) {
         CompletableFuture<Void> future = new CompletableFuture<>();
 
-        plugin.getServer().getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.getFoliaLib().getImpl().runAsync(() -> {
 
             // File lock while saving
             AtomicBoolean savingFlag = playerData.isSaving();

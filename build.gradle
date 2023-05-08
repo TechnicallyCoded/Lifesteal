@@ -1,9 +1,10 @@
 plugins {
     id 'java'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
 }
 
 group = 'com.tcoded'
-version = '1.0.2'
+version = '1.1.0'
 
 repositories {
     mavenCentral()
@@ -15,10 +16,20 @@ repositories {
         name = "sonatype"
         url = "https://oss.sonatype.org/content/groups/public/"
     }
+    maven {
+        name = "devmart-other"
+        url = "https://nexuslite.gcnt.net/repos/other/"
+    }
 }
 
 dependencies {
     compileOnly "io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT"
+    implementation "com.tcoded:FoliaLib:0.2.3"
+}
+
+shadowJar {
+    archiveClassifier.set("")
+    relocate 'com.tcoded.folialib', 'com.tcoded.lifesteal.lib.folialib'
 }
 
 def targetJavaVersion = 17

@@ -1,5 +1,6 @@
 package com.tcoded.lifesteal.listener;
 
+import com.tcoded.folialib.impl.ServerImplementation;
 import com.tcoded.lifesteal.Lifesteal;
 import com.tcoded.lifesteal.model.LifestealGroup;
 import com.tcoded.lifesteal.model.PlayerData;
@@ -59,7 +60,12 @@ public class JoinListener implements Listener {
             String hubWorldName = group.getHubWorld();
             if (hubWorldName != null) {
                 World hubWorld = plugin.getServer().getWorld(hubWorldName);
-                if (hubWorld != null) player.teleport(hubWorld.getSpawnLocation());
+                if (hubWorld != null) {
+                    ServerImplementation impl = plugin.getFoliaLib().getImpl();
+                    impl.runAtEntity(player, () -> {
+                        impl.teleportAsync(player, hubWorld.getSpawnLocation());
+                    });
+                }
                 return;
             }
         }

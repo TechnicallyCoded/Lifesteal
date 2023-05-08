@@ -2,3 +2,4 @@ name: Lifesteal
 version: '${version}'
 main: com.tcoded.lifesteal.Lifesteal
 api-version: 1.19
+folia-supported: true

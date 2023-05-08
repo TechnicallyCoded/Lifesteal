@@ -1,8 +1,11 @@
 package com.tcoded.lifesteal;
 
+import com.google.common.collect.ImmutableList;
+import com.tcoded.folialib.FoliaLib;
 import com.tcoded.lifesteal.listener.*;
 import com.tcoded.lifesteal.manager.PlayerDataManager;
 import com.tcoded.lifesteal.model.LifestealGroup;
+import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -11,8 +14,11 @@ import java.util.List;
 
 public final class Lifesteal extends JavaPlugin {
 
+    // Utils
+    private FoliaLib foliaLib;
+
     // Config
-    private final List<LifestealGroup> lifestealGroups = new ArrayList<>();
+    private ImmutableList<LifestealGroup> lifestealGroups;
     private boolean loseHeartsOnNonPlayerDeath;
     private int hpLoseAmount;
     private boolean allowLifestealing;
@@ -25,6 +31,9 @@ public final class Lifesteal extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        // Utils
+        this.foliaLib = new FoliaLib(this);
+
         // Load config
         saveDefaultConfig();
 
@@ -37,6 +46,7 @@ public final class Lifesteal extends JavaPlugin {
         maxHpForBonusItem = getConfig().getInt("max-hp-for-bonus-item");
 
         // Get data for each group
+        ImmutableList.Builder<LifestealGroup> lifestealGroupsBuilder = ImmutableList.builder();
         for (String group : getConfig().getConfigurationSection("groups").getKeys(false)) {
             String hubWorld = getConfig().getString("groups." + group + ".hub-world");
             int minHealth = getConfig().getInt("groups." + group + ".min-health");
@@ -44,8 +54,9 @@ public final class Lifesteal extends JavaPlugin {
 
             // Save world to list
             LifestealGroup lifestealGroup = new LifestealGroup(group, hubWorld, minHealth, worlds);
-            lifestealGroups.add(lifestealGroup);
+            lifestealGroupsBuilder.add(lifestealGroup);
         }
+        lifestealGroups = lifestealGroupsBuilder.build();
 
         // Initialize managers
         playerDataManager = new PlayerDataManager(this);
@@ -65,17 +76,13 @@ public final class Lifesteal extends JavaPlugin {
         HandlerList.unregisterAll(this);
 
         // cancel all tasks
-        getServer().getScheduler().cancelTasks(this);
+        foliaLib.getImpl().cancelAllTasks();
 
         // save player data
         playerDataManager.saveAllPlayerData();
     }
 
-    // all getters
-
-    public List<LifestealGroup> getLifestealGroups() {
-        return lifestealGroups;
-    }
+    // All getters
 
     public boolean isLoseHeartsOnNonPlayerDeath() {
         return loseHeartsOnNonPlayerDeath;
@@ -123,5 +130,9 @@ public final class Lifesteal extends JavaPlugin {
                 .filter(lifestealGroup -> lifestealGroup.isWorldInGroup(worldName))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public FoliaLib getFoliaLib() {
+        return this.foliaLib;
     }
 }

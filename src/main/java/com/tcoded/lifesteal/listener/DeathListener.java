@@ -62,7 +62,7 @@ public class DeathListener implements Listener {
                     String hubWorldName = lifestealGroup.getHubWorld();
                     if (hubWorldName != null) {
                         World world = this.plugin.getServer().getWorld(hubWorldName);
-                        if (world != null) victim.teleport(world.getSpawnLocation());
+                        if (world != null) plugin.getFoliaLib().getImpl().teleportAsync(victim, world.getSpawnLocation());
                     }
                 }
                 sendVictimLoseHpMessage(hpLoseAmount, maxHp, victim, victimResult);
